@@ -20,8 +20,14 @@
 #include "src/uart/uart_func.h"
 #include <src/uart/uart_lowlevel.h>
 
-char uart_rx_buf[96] = {0};
-uint8_t uart_rx_byte_idx = 0;
+char uart_rx_msg[96];
+uint8_t uart_rx_msg_len;
+
+char uart_tx_msg[96];
+uint8_t uart_tx_byte_idx;
+
+static char uart_rx_buf[96] = {0};
+static uint8_t uart_rx_byte_idx = 0;
 
 typedef enum {
     MSG_TYPE_UNKNOWN = 0,

@@ -1,3 +1,4 @@
+REV := R52
 
 # -------
 # Helpers
@@ -26,7 +27,7 @@ GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 # Toolchain
 CC := arm-none-eabi-gcc
 CPP := arm-none-eabi-g++
-LD := arm-none-eabi-g++
+LD := arm-none-eabi-gcc
 OBJCOPY := arm-none-eabi-objcopy
 SIZE_EX := arm-none-eabi-size
 ifeq ($(OS),Windows)
@@ -42,22 +43,24 @@ BASEFLAGS += -mcpu=cortex-m4
 BASEFLAGS += -mthumb
 BASEFLAGS += -mfloat-abi=hard
 BASEFLAGS += -mfpu=fpv4-sp-d16
-BASEFLAGS += -ffunction-sections # generate a separate ELF section for each function in the source file
-BASEFLAGS += -fdata-sections # generate a separate ELF section for each data item in the source file
-BASEFLAGS += -fno-tree-loop-distribute-patterns # disable replacing with calls to builting functions
-BASEFLAGS += -Wall
-BASEFLAGS += -Wlogical-op
-BASEFLAGS += -Waggregate-return
-BASEFLAGS += -Wshadow
-BASEFLAGS += -Wdouble-promotion
-BASEFLAGS += -DBOARD_REV_$(REV)
-BASEFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"
-BASEFLAGS += $(INCLUDEFLAGS)
 
 # Compiler flags (c and c++), inherit BASEFLAGS
 COMPILEFLAGS += $(BASEFLAGS)
-COMPILEFLAGS += -fcommon # legacy behavior for GCC 10
-COMPILEFLAGS += -fstack-usage # emit stack usage info
+COMPILEFLAGS += -ffunction-sections # generate a separate ELF section for each function in the source file
+COMPILEFLAGS += -fdata-sections # generate a separate ELF section for each data item in the source file
+COMPILEFLAGS += -fno-tree-loop-distribute-patterns # disable replacing with calls to builting functions
+COMPILEFLAGS += -Wall
+COMPILEFLAGS += -Wextra
+COMPILEFLAGS += -Werror
+COMPILEFLAGS += -Wlogical-op
+COMPILEFLAGS += -Waggregate-return
+COMPILEFLAGS += -Wshadow
+COMPILEFLAGS += -Wdouble-promotion
+COMPILEFLAGS += -Wno-missing-field-initializers
+COMPILEFLAGS += -Wno-error=unused-parameter
+COMPILEFLAGS += -DBOARD_REV_$(REV)
+COMPILEFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"
+COMPILEFLAGS += $(INCLUDEFLAGS)
 
 # gcc flags, inherit COMPILEFLAGS
 CFLAGS += -Wstrict-prototypes
@@ -72,23 +75,25 @@ CPPFLAGS += $(COMPILEFLAGS)
 LDFLAGS += $(BASEFLAGS)
 LDFLAGS += -Tpac55xx.ld
 LDFLAGS += -nostartfiles
-LDFLAGS += -Xlinker --gc-sections # optimize function and data sections produced during compile...
-# LDFLAGS += -Xlinker --print-gc-sections # ... and print relevant info
-LDFLAGS += -Xlinker -Map="$(BUILDDIR)/tinymovr.map"
+LDFLAGS += -Wl,--gc-sections # optimize function and data sections produced during compile...
+LDFLAGS += -Wl,-Map="$(BUILDDIR)/tinymovr.map"
+LDFLAGS += -Wl,--print-memory-usage
+
+LIBS := -lm
 
 # objcopy flags
 HEXFLAGS += -O ihex
 BINFLAGS += -O binary
 
 # Headers
-INCLUDEDIRS := . ./cmsis_core/ ./pac55xx_sdk/ ./pac55xx_sdk/device/ ./pac55xx_sdk/driver/ ./pac55xx_sdk/peripheral/
+INCLUDEDIRS := . cmsis_core pac55xx_sdk pac55xx_sdk/device pac55xx_sdk/driver pac55xx_sdk/peripheral
 INCLUDEFLAGS := $(foreach d, $(INCLUDEDIRS), -I$d)
 
 # Source Files
-CSOURCES := $(call rwildcard,./src,*.c)
-CSOURCES += $(call rwildcard,./pac55xx_sdk,*.c)
-CPPSOURCES := $(call rwildcard,./src,*.cpp)
-CPPSOURCES += $(call rwildcard,./pac55xx_sdk,*.cpp)
+CSOURCES := $(call rwildcard,src,*.c)
+CSOURCES += $(call rwildcard,pac55xx_sdk,*.c)
+CPPSOURCES := $(call rwildcard,src,*.cpp)
+CPPSOURCES += $(call rwildcard,pac55xx_sdk,*.cpp)
 
 # List of object files, with paths
 OBJECTS := $(addprefix $(BUILDDIR)/,$(CSOURCES:%.c=%.o)) $(addprefix $(BUILDDIR)/,$(CPPSOURCES:%.cpp=%.o))
@@ -132,7 +137,7 @@ $(BIN): $(ELF)
 # Link
 $(ELF): $(OBJECTS)
 	- $(OBJCOPY) -I binary -O elf32-littlearm -B arm --rename-section .data=.bl_section,alloc,load,readonly,data,contents $(PROJECTDIR)/bootloader.bin $(BUILDDIR)/bootloader.o
-	$(LD) $(LDFLAGS) $(OBJECTS) -o $(ELF)
+	$(LD) $(LDFLAGS) $(OBJECTS) -o $(ELF) $(LIBS)
 	$(SIZE_EX) --format=berkeley $(ELF)
 
 # Compile C

@@ -246,6 +246,7 @@ TM_RAMFUNC void ADC_update(void)
             adc_config.I_phase_offset.A += (((float)PAC55XX_ADC->DTSERES6.VAL * SHUNT_SCALING_FACTOR) - adc_config.I_phase_offset.A) * adc_config.I_phase_offset_k;
             adc_config.I_phase_offset.B += (((float)PAC55XX_ADC->DTSERES8.VAL * SHUNT_SCALING_FACTOR) - adc_config.I_phase_offset.B) * adc_config.I_phase_offset_k;
             adc_config.I_phase_offset.C += (((float)PAC55XX_ADC->DTSERES10.VAL * SHUNT_SCALING_FACTOR) - adc_config.I_phase_offset.C) * adc_config.I_phase_offset_k;
+            break;
         }
         case STATE_CL_CONTROL:
         {
@@ -255,6 +256,7 @@ TM_RAMFUNC void ADC_update(void)
             adc_state.I_phase_meas.A = ((1.0f - I_FILTER_K) * i_a) - (I_FILTER_K * (i_b + i_c));
             adc_state.I_phase_meas.B = ((1.0f - I_FILTER_K) * i_b) - (I_FILTER_K * (i_a + i_c));
             adc_state.I_phase_meas.C = ((1.0f - I_FILTER_K) * i_c) - (I_FILTER_K * (i_a + i_b));
+            break;
         }
         default: break;
     }

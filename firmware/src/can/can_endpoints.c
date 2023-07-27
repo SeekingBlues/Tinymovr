@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 /*
 * This file was automatically generated using Avlos.
 * https://github.com/tinymovr/avlos
