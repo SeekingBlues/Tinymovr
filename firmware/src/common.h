@@ -122,6 +122,6 @@ typedef struct
 	float C;
 } FloatTriplet;
 
-static const FloatTriplet zeroDC = {0.5f, 0.5f, 0.5f};
+static const FloatTriplet three_phase_zero = {0.5f, 0.5f, 0.5f};
 
 #endif // #ifndef COMMON_H
