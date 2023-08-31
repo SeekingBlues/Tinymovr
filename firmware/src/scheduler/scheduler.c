@@ -74,7 +74,7 @@ void WaitForControlLoopInterrupt(void)
 		ma7xx_send_angle_cmd();
 	}
 	ADC_update();
-	system_update();
+	
 	encoder_update(true);
 	observer_update();
 	// At this point control is returned to main loop.
@@ -106,6 +106,7 @@ void ADC_IRQHandler(void)
 void SysTick_Handler(void)
 {                               
     msTicks = msTicks + 1; 
+    system_update();
 }
 
 void UART_ReceiveMessageHandler(void)
