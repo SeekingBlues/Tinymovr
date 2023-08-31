@@ -40,7 +40,6 @@ int main(void)
     I2C_Init();
 	observer_init();
 	ADC_Init();
-	GateDriver_Init();
     Timer_Init();
     Watchdog_init();
     __enable_irq();
