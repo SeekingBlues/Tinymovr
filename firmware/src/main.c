@@ -39,7 +39,7 @@ int main(void)
     UART_Init();
     I2C_Init();
 	observer_init();
-	ADC_Init();
+	ADC_init();
     Timer_Init();
     Watchdog_init();
     __enable_irq();
