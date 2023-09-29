@@ -19,6 +19,12 @@
 
 #include <src/common.h>
 
+typedef enum
+{
+    HOMING_WARNINGS_NONE = 0,
+    HOMING_WARNINGS_HOMING_TIMEOUT = (1 << 0)
+} homing_warnings_flags;
+
 typedef struct {
     float homing_velocity;
     float max_homing_t;

@@ -33,6 +33,13 @@
 #define MIN_ALLOWED_DELTA_ADD (-MAX_ALLOWED_DELTA + ENCODER_TICKS)
 #define MIN_ALLOWED_DELTA_SUB (-MAX_ALLOWED_DELTA - ENCODER_TICKS)
 
+typedef enum
+{
+    ENCODER_ERRORS_NONE = 0,
+    ENCODER_ERRORS_CALIBRATION_FAILED = (1 << 0), 
+    ENCODER_ERRORS_READING_UNSTABLE = (1 << 1)
+} encoder_errors_flags;
+
 typedef struct
 {
 	bool rec_calibrated;

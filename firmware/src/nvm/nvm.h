@@ -25,7 +25,6 @@
 #include <src/observer/observer.h>
 #include <src/controller/controller.h>
 #include <src/controller/trajectory_planner.h>
-#include <src/can/can.h>
 
 #define SETTINGS_PAGE (120)
 #define SETTINGS_PAGE_HEX (0x0001E000)
@@ -38,7 +37,6 @@ struct NVMStruct {
     EncoderConfig encoder_config;
     ObserverConfig observer_config;
     ControllerConfig controller_config;
-    CANConfig can_config;
     TrajPlannerConfig traj_planner_config;
     char version[16];
 };

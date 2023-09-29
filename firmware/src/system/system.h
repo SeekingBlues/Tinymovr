@@ -22,6 +22,13 @@
 #define CLKREF_FREQ_HZ              (4000000)
 #define FRCLK_FREQ_HZ               CLKREF_FREQ_HZ
 
+typedef enum
+{
+    ERRORS_NONE = 0,
+    ERRORS_UNDERVOLTAGE = (1 << 0), 
+    ERRORS_DRIVER_FAULT = (1 << 1)
+} errors_flags;
+
 typedef struct {
     float Vbus;
     uint8_t errors;

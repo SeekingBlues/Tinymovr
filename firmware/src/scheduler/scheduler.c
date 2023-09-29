@@ -19,13 +19,12 @@
 #include <src/system/system.h>
 #include <src/gatedriver/gatedriver.h>
 #include <src/adc/adc.h>
-#include <src/can/can.h>
 #include <src/uart/uart_interface.h>
 #include <src/uart/uart_lowlevel.h>
+#include <src/i2c/i2c.h>
 #include <src/encoder/encoder.h>
 #include <src/encoder/ma7xx.h>
 #include <src/observer/observer.h>
-#include <src/can/can_endpoints.h>
 #include <src/scheduler/scheduler.h>
 #include <src/watchdog/watchdog.h>
 
@@ -39,21 +38,16 @@ void WaitForControlLoopInterrupt(void)
 	while (!state.adc_interrupt)
 	{
 		
-		if (state.can_interrupt)
-		{
-			// Handle CAN
-			CAN_process_interrupt();
-			// Only clear the flag if all messages in the CAN RX buffer have been processed
-			if (PAC55XX_CAN->SR.RBS == 0)
-			{
-				state.can_interrupt = false;
-			}
-		}
-		else if (state.uart_message_interrupt)
+		if (state.uart_message_interrupt)
 		{
 			// Handle UART
 			state.uart_message_interrupt = false;
 			UART_process_message();
+		}
+		else if (state.i2c_message_interrupt)
+		{
+			state.i2c_message_interrupt = false;
+			I2C_process_message();
 		}
 		else if (state.wwdt_interrupt)
 		{
@@ -109,21 +103,19 @@ void ADC_IRQHandler(void)
 	state.total_loop_start = current_timestamp;
 }
 
-void CAN_IRQHandler(void)
-{
-	pac5xxx_can_int_clear_RI();
-	state.can_interrupt = true;
-}
-
 void SysTick_Handler(void)
 {                               
     msTicks = msTicks + 1; 
-    CAN_task();
 }
 
 void UART_ReceiveMessageHandler(void)
 {
 	state.uart_message_interrupt = true;
+}
+
+void I2C_ReceiveMessageHandler(void)
+{
+	state.i2c_message_interrupt = true;
 }
 
 void Wdt_IRQHandler(void)

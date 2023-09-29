@@ -48,7 +48,6 @@ BASEFLAGS += -mfpu=fpv4-sp-d16
 COMPILEFLAGS += $(BASEFLAGS)
 COMPILEFLAGS += -ffunction-sections # generate a separate ELF section for each function in the source file
 COMPILEFLAGS += -fdata-sections # generate a separate ELF section for each data item in the source file
-COMPILEFLAGS += -fno-tree-loop-distribute-patterns # disable replacing with calls to builting functions
 COMPILEFLAGS += -Wall
 COMPILEFLAGS += -Wextra
 COMPILEFLAGS += -Werror

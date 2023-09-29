@@ -23,7 +23,6 @@
 #include "src/controller/trajectory_planner.h"
 #include "src/adc/adc.h"
 #include "src/nvm/nvm.h"
-#include "src/can/can.h"
 #include "src/utils/utils.h"
 #include "src/uart/uart_lowlevel.h"
 #include "src/uart/uart_interface.h"
@@ -77,14 +76,6 @@ void UART_WriteAddr(uint8_t addr, int32_t data)
 
     case 'W': // Set Iq Limit
         controller_set_Iq_limit((float)data * ONE_OVER_UART_IQ_LIMIT_SCALING_FACTOR);
-        break;
-        
-    case 'U': // CAN Baud Rate
-        CAN_set_kbit_rate((uint16_t)data);
-        break;
-
-    case 'C': // CAN ID
-        CAN_set_ID((uint8_t)data);
         break;
 
     case '<': // Max Decel
@@ -162,10 +153,6 @@ int32_t UART_ReadAddr(uint8_t addr)
 
     case 'W': // Get Iq Limit
         ret_val = (int32_t)(controller_get_Iq_limit() * UART_IQ_LIMIT_SCALING_FACTOR);
-        break;
-
-    case 'C': // CAN ID
-        ret_val = CAN_get_ID();
         break;
 
     case 'M': // Is motor gimbal?

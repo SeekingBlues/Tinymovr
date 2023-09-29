@@ -5,7 +5,6 @@
 #include <src/controller/controller.h>
 #include <src/utils/utils.h>
 #include <homing_planner.h>
-#include <src/can/can_endpoints.h>
 
 static HomingPlannerConfig config = {
     .homing_velocity = -8192.0f, // ticks/s

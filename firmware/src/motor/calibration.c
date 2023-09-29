@@ -23,9 +23,9 @@
 #include <src/encoder/ma7xx.h>
 #include <src/encoder/hall.h>
 #include <src/controller/controller.h>
-#include <src/can/can_endpoints.h>
 #include <src/system/system.h>
 #include <src/motor/calibration.h>
+#include <src/motor/motor.h>
 
 static inline void set_epos_and_wait(float angle, float I_setpoint);
 static inline void wait_a_while(void);

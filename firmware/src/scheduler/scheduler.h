@@ -17,11 +17,18 @@
 
 #pragma once
 
+typedef enum
+{
+    SCHEDULER_ERRORS_NONE = 0,
+    SCHEDULER_ERRORS_CONTROL_BLOCK_REENTERED = (1 << 0)
+} scheduler_errors_flags;
+
 typedef struct 
 {
 	bool adc_interrupt;
 	bool can_interrupt;
 	bool uart_message_interrupt;
+    bool i2c_message_interrupt;
     bool wwdt_interrupt;
 	bool busy;
 

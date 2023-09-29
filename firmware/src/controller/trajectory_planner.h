@@ -20,6 +20,13 @@
 
 #include <src/common.h>
 
+typedef enum
+{
+    TRAJ_PLANNER_ERRORS_NONE = 0,
+    TRAJ_PLANNER_ERRORS_INVALID_INPUT = (1 << 0), 
+    TRAJ_PLANNER_ERRORS_VCRUISE_OVER_LIMIT = (1 << 1)
+} traj_planner_errors_flags;
+
 typedef struct {
 	float max_accel;
 	float max_decel;

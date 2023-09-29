@@ -31,6 +31,14 @@
 #define MAX_PHASE_INDUCTANCE (1e-2f)
 #endif
 
+typedef enum
+{
+    MOTOR_ERRORS_NONE = 0,
+    MOTOR_ERRORS_PHASE_RESISTANCE_OUT_OF_RANGE = (1 << 0), 
+    MOTOR_ERRORS_PHASE_INDUCTANCE_OUT_OF_RANGE = (1 << 1), 
+    MOTOR_ERRORS_INVALID_POLE_PAIRS = (1 << 2)
+} motor_errors_flags;
+
 typedef struct
 {
 	uint8_t pole_pairs;

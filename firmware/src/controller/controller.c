@@ -24,7 +24,6 @@
 #include <src/utils/utils.h>
 #include <src/scheduler/scheduler.h>
 #include <src/motor/calibration.h>
-#include <src/can/can_endpoints.h>
 #include <src/controller/controller.h>
 #include "src/watchdog/watchdog.h"
 

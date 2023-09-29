@@ -24,6 +24,20 @@
 
 typedef enum
 {
+    CONTROLLER_ERRORS_NONE = 0,
+    CONTROLLER_ERRORS_CURRENT_LIMIT_EXCEEDED = (1 << 0)
+} controller_errors_flags;
+
+typedef enum
+{
+    CONTROLLER_WARNINGS_NONE = 0,
+    CONTROLLER_WARNINGS_VELOCITY_LIMITED = (1 << 0), 
+    CONTROLLER_WARNINGS_CURRENT_LIMITED = (1 << 1), 
+    CONTROLLER_WARNINGS_MODULATION_LIMITED = (1 << 2)
+} controller_warnings_flags;
+
+typedef enum
+{
     STATE_IDLE = 0,
     STATE_CALIBRATE = 1,
     STATE_CL_CONTROL = 2

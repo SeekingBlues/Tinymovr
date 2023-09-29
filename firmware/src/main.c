@@ -20,13 +20,13 @@
 #include "src/system/system.h"
 
 #include "src/uart/uart_lowlevel.h"
+#include "src/i2c/i2c.h"
 #include "src/observer/observer.h"
 #include "src/adc/adc.h"
 #include "src/motor/motor.h"
 #include "src/controller/controller.h"
 #include "src/gatedriver/gatedriver.h"
 #include "src/timer/timer.h"
-#include "src/can/can.h"
 #include "src/nvm/nvm.h"
 #include "src/watchdog/watchdog.h"
 
@@ -37,10 +37,10 @@ int main(void)
     nvm_load_config(); // This will TRY to deserialize and import config
     encoder_init();
     UART_Init();
+    I2C_Init();
 	observer_init();
 	ADC_Init();
 	GateDriver_Init();
-    CAN_init();
     Timer_Init();
     Watchdog_init();
     __enable_irq();

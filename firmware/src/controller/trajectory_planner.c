@@ -18,7 +18,6 @@
 #include <src/common.h>
 #include <src/system/system.h>
 #include <src/controller/controller.h>
-#include <src/can/can_endpoints.h>
 #include <src/utils/utils.h>
 #include <src/controller/trajectory_planner.h>
 
