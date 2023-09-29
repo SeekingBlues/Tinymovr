@@ -53,21 +53,35 @@ void I2C_IRQHandler(void)
 void I2C_process_message(void)
 {
     uint8_t cmd = s_rx_buf[0];
-    int32_t value = 0;
-    memcpy(&value, s_rx_buf + 1, sizeof(value));
     switch (cmd) {
+    case 'M':
+        switch (s_rx_buf[1]) {
+        case 'C':
+            controller_calibrate();
+            break;
+        case 'I':
+            controller_idle();
+            break;
+        case 'P':
+            controller_position_mode();
+            break;
+        case 'V':
+            controller_velocity_mode();
+            break;
+        default:
+            ;
+        }
+        break;
     case 'P':
-        controller_set_Iq_setpoint_user_frame(0);
-        controller_set_vel_setpoint_user_frame(0);
-        controller_set_pos_setpoint_user_frame(value);
-        controller_set_mode(CTRL_POSITION);
+    case 'V': {
+        int32_t value = 0; // float?
+        memcpy(&value, s_rx_buf + 1, sizeof(value));
+        if (cmd == 'P')
+            controller_set_pos_setpoint_user_frame(value);
+        else
+            controller_set_vel_setpoint_user_frame(value);
         break;
-    case 'V':
-        controller_set_Iq_setpoint_user_frame(0);
-        controller_set_vel_setpoint_user_frame(value);
-        controller_set_mode(CTRL_VELOCITY);
-        controller_set_vel_setpoint_user_frame(value);
-        break;
+    }
     default:
         ;
     }
