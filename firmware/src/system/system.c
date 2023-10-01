@@ -79,11 +79,6 @@ void system_init(void)
     // Vp = 10V , 440mA-540mA, Charge Pump Enable
     pac5xxx_tile_register_write(ADDR_SYSCONF, 0x01);
 
-    // Configure reporting of mcu cycles
-    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-    DWT->CYCCNT = 0;
-    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-
     // Configure error handling
     SCB->CCR |= 0x10;
 
