@@ -42,24 +42,18 @@ static inline float our_fabsf(float x)
 
 #endif
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#pragma GCC diagnostic ignored "-Wuninitialized"
 static inline float fast_inv_sqrt(float n)
 {
-	long i;
-	float y;
+    union {
+        float y;
+        uint32_t i;
+    } v = { .y = n };
 
-	const float x = n * 0.5f;
-	y = n;
-	i = *(long *)&y;
-	i = 0x5f3759df - (i >> 1);
-	y = *(float *)&i;
-	y = y * (1.5f - (x * y * y));
+    v.i = 0x5f3759df - (v.i >> 1);
+    v.y *= 1.5f - (n * 0.5F * v.y * v.y);
 
-	return y;
+    return v.y;
 }
-#pragma GCC diagnostic pop
 
 static inline float our_fminf(float a, float b)
 {
